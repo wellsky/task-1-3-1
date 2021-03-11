@@ -9,14 +9,22 @@ fun main() {
 }
 
 fun agoToText(secondsAgo: Int): String {
-    return when {
-        (secondsAgo < 60) -> "только что"
-        (secondsAgo < 3600) -> (secondsAgo / 60).toString() + " " + countWord(secondsAgo / 60, "минуту", "минуты", "минут") + " назад"
-        (secondsAgo < 3600 * 24) -> (secondsAgo / 3600).toString() + " " + countWord(secondsAgo / 3600, "час", "часа", "часов") + " назад"
-        (secondsAgo < 3600 * 24 * 2) -> "сегодня"
-        (secondsAgo < 3600 * 24 * 3) -> "вчера"
+    return when (secondsAgo) {
+        in 0 .. 60 -> "только что"
+        in 61 .. 60 * 60 -> (secondsAgo / 60).toString() + " " + minutes(secondsAgo) + " назад"
+        in 60 * 60 + 1 .. 60 * 60 * 24 -> (secondsAgo / 3600).toString() + " " + hours(secondsAgo ) + " назад"
+        in 60 * 60 * 24 + 1 ..  60 * 60 * 24 * 2 -> "сегодня"
+        in 60 * 60 * 24 * 2 + 1 .. 60 * 60 * 24 * 3 -> "вчера"
         else -> "давно"
     }
+}
+
+fun minutes(seconds: Int): String {
+    return countWord(seconds / 60, "минуту", "минуты", "минут")
+}
+
+fun hours(seconds: Int): String {
+    return countWord(seconds / 3600, "час", "часа", "часов")
 }
 
 fun countWord(count: Int, form1: String, form2: String, form5: String): String {
